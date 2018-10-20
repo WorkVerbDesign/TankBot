@@ -48,6 +48,13 @@
     left motor forward - 16
     left motor backward - 14
 
+    upper left
+    top dn
+    blue, blk, wht, vio, blk, yel
+
+    upper right top dn
+    lr, rd, lb, rr, rd, rb
+
   NOTES:
     chatroom location of #bother_tank":
     #chatrooms:32178044:f6f6337a-71f1-42f3-8405-91499640fa84
@@ -62,14 +69,14 @@
 //==============Constants======================
 const String chunnel = "#chatrooms:32178044:4e7e70a1-ee13-41b2-a202-3a9cdbec4653";
 const String userName = "bother_tank";
-const int ramper = 10; //0 to 255 I guess
-const int cmdTime = 400; //ms [replace later]
-const int governator = 255;
+const int rampner = 10; //0 to 255 I guess
+const int cmdTime = 1000; //ms [replace later]
+const int governator = 750;
 
 //==============Globals========================
 int state = 0;
 uint8_t cmdInsert = 1;
-uint8_t cmdArray[50];
+uint8_t cmdArray[10];
 int treadRightSpeed = 0;
 int treadLeftSpeed = 0;
 unsigned long cmdStartTime = 0;
@@ -289,6 +296,7 @@ void ircConnect() {
 void looper(){
   client.loop();
   yield();
+  printArray();
 }
 
 //==============HELPER FUNCTIONS=============
@@ -305,13 +313,22 @@ void blinkenLight(int miller_time) {
 
 //move over the command array at the completion of a function
 void shiftArray(){
-  for(int i = 1 ; i <= sizeof(cmdArray)-2 ; i++){
+  for(int i = 0 ; i <= sizeof(cmdArray)-2 ; i++){
     cmdArray[i] = cmdArray[i+1];
   }
   cmdArray[ sizeof(cmdArray)-1 ] = 0;
   if(cmdInsert > 1){
     cmdInsert--;
   }
+}
+
+void printArray(){
+  Serial.print("[ ");
+  for(int i = 0; i <= sizeof(cmdArray)-1 ; i++){
+    Serial.print(cmdArray[i]);
+    Serial.print(", ");
+  }
+  Serial.println("]");
 }
 
 //move over the command array to make room for a fat ass command
@@ -329,50 +346,49 @@ void shiftArrayInsert(){
 
 void halt(){
   if(treadRightSpeed > 0){
-    treadRightSpeed -= ramper;
+    treadRightSpeed -= rampner;
     treadRightSpeed = constrain(treadRightSpeed, 0, governator);
   }else if(treadRightSpeed < 0){
-    treadRightSpeed += ramper;
+    treadRightSpeed += rampner;
     treadRightSpeed = constrain(treadRightSpeed, -governator, 0);
   }
   
   if(treadLeftSpeed > 0){
-    treadLeftSpeed -= ramper;
+    treadLeftSpeed -= rampner;
     treadLeftSpeed = constrain(treadLeftSpeed, 0, governator);
   }else if(treadLeftSpeed < 0){
-    treadLeftSpeed += ramper;
+    treadLeftSpeed += rampner;
     treadLeftSpeed = constrain(treadLeftSpeed, -governator, 0);
   }
 }
 
 void forward() {
   //sendTwitchMessage("tendies on!");
-  treadRightSpeed += ramper;
-  treadLeftSpeed += ramper;
+  treadRightSpeed += rampner;
+  treadLeftSpeed += rampner;
 }
 
 void back() {
   //sendTwitchMessage("tendies retreat!");
-  treadRightSpeed -= ramper;
-  treadLeftSpeed -= ramper;
+  treadRightSpeed -= rampner;
+  treadLeftSpeed -= rampner;
 }
 
 void left() {
   //sendTwitchMessage("tendies left");
-  treadRightSpeed -= ramper;
-  treadLeftSpeed += ramper;
+  treadRightSpeed += rampner;
+  treadLeftSpeed -= rampner;
   
 }
 
 void right() {
   //sendTwitchMessage("tendies right!");
-  treadRightSpeed += ramper;
-  treadLeftSpeed -= ramper;
+  treadRightSpeed -= rampner;
+  treadLeftSpeed += rampner;
 
 }
 
 void attack(){
-  sendTwitchMessage("REEEEEEEEE");
-  
+  //sendTwitchMessage("REEEEEEEEE");
 }
 
