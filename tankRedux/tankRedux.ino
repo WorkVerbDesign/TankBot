@@ -70,6 +70,10 @@
 const String chunnel = "#chatrooms:32178044:4e7e70a1-ee13-41b2-a202-3a9cdbec4653";
 const String userName = "bother_tank";
 const int rampner = 10; //0 to 255 I guess
+
+const int soft_rampner_forward_tread = 9; //0 to 255 I guess
+const int soft_rampner_backward_tread = 6; //0 to 255 I guess
+
 const int cmdTime = 1000; //ms [replace later]
 const int governator = 750;
 
@@ -136,6 +140,8 @@ const static struct cmds {
   {"left", left},
   {"right", right},
   {"attack", attack}
+  {"sl", soft_left}.
+  {"sr", soft_right}
 };
 
 const int ppSize = sizeof(ppList) / sizeof(cmds);
@@ -381,6 +387,13 @@ void left() {
   
 }
 
+void soft_left() {
+  //sendTwitchMessage("tendies left");
+  treadRightSpeed += soft_rampner_forward_tread;
+  treadLeftSpeed -= soft_rampner_backward_tread;
+  
+}
+
 void right() {
   //sendTwitchMessage("tendies right!");
   treadRightSpeed -= rampner;
@@ -388,7 +401,15 @@ void right() {
 
 }
 
+void soft_right() {
+  //sendTwitchMessage("tendies right!");
+  treadRightSpeed -= soft_rampner_backward_tread;
+  treadLeftSpeed += soft_rampner_forward_tread;
+
+}
+
 void attack(){
   //sendTwitchMessage("REEEEEEEEE");
 }
+
 
