@@ -61,17 +61,17 @@
 */
 
 //==============Pins===========================
-#define MOTOR_RF 4
-#define MOTOR_RB 12
-#define MOTOR_LF 16
-#define MOTOR_LB 14
+#define MOTOR_RF 5
+#define MOTOR_RB 4
+#define MOTOR_LF 14
+#define MOTOR_LB 13
 
 //==============Constants======================
 const String chunnel = "#chatrooms:32178044:4e7e70a1-ee13-41b2-a202-3a9cdbec4653";
 const String userName = "bother_tank";
-const int rampner = 10; //0 to 255 I guess
-const int cmdTime = 1000; //ms [replace later]
-const int governator = 750;
+const int rampner = 12; //0 to 255 I guess
+const int cmdTime = 200; //ms [replace later]
+const int governator = 800;
 
 //==============Globals========================
 int state = 0;
@@ -140,7 +140,7 @@ const static struct cmds {
 
 const int ppSize = sizeof(ppList) / sizeof(cmds);
 
-//==============Loooooop========================
+//==============Soooooop========================
 void loop() {
   ArduinoOTA.handle();
   connectMachine();
